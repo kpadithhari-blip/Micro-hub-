@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Joke Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .joke-container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="joke-container">
+        <h1>Random Joke Generator</h1>
+        <p id="joke">Click the button to load a joke!</p>
+        <button id="jokeButton">Get New Joke</button>
+    </div>
+    <script>
+        function fetchJoke() {
+            fetch('https://v2.jokeapi.dev/joke/Any')
+                .then(response => response.json())
+                .then(data => {
+                    const jokeElement = document.getElementById('joke');
+                    if (data.type === 'single') {
+                        jokeElement.innerText = data.joke;
+                    } else {
+                        jokeElement.innerText = `${data.setup} - ${data.delivery}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching joke:', error);
+                    document.getElementById('joke').innerText = 'Failed to fetch a joke.';
+                });
+        }
+
+        document.getElementById('jokeButton').addEventListener('click', fetchJoke);
+
+        // Fetch a joke on initial load
+        fetchJoke();
+    </script>
+</body>
+</html>
